@@ -22,6 +22,7 @@
         }
     </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nyala&family=Roboto:wght@400;500;700;900&display=swap');
         .obn-letterhead-bg {
             background-color: #ffffff;
             width: 210mm;
@@ -53,6 +54,9 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+        }
+        .font-nyala {
+            font-family: 'Nyala', 'Times New Roman', serif;
         }
     </style>
 </head>
@@ -147,8 +151,20 @@
                             <i class="fas fa-sliders-h text-obnRed"></i> Saffata herregaa
                         </h3>
                         <div>
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Afaan Xalayaa (Letter Language)</label>
+                            <select id="letterLanguage" onchange="calculateOfficialLetter()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-obnRed font-bold text-slate-700">
+                                <option value="om">Afaan Oromoo</option>
+                                <option value="en">English</option>
+                                <option value="am">አማርኛ (Amharic)</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Maqaa Dhaabbataa (To: Client)</label>
                             <input type="text" id="clientName" placeholder="Fkn. SOS CV Yabelo" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Teessoo Maamilaa (Client City/Address)</label>
+                            <input type="text" id="clientAddress" value="Yabelo" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Gosa Miidiyaa (Media Type)</label>
@@ -165,7 +181,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Gosa Sagantaa</label>
-                            <select id="programType" onchange="toggleUnitLabel()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-obnRed">
+                            <select id="programType" onchange="toggleUnitLabel(); calculateOfficialLetter();" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-obnRed">
                                 <option value="Airtime">Yeroo Qilleensaa (Airtime/Program)</option>
                                 <option value="Advertisement">Sagantaa Beeksisaa (Spot Advertisement)</option>
                             </select>
@@ -173,21 +189,21 @@
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label id="unitLabel" class="block text-xs font-bold text-gray-600 uppercase mb-1">Daqiiqaa (Duration)</label>
-                                <input type="number" id="durationValue" value="20" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                                <input type="number" id="durationValue" value="20" oninput="calculateOfficialLetter()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Yeroo Meeqa (Freq)</label>
-                                <input type="number" id="frequency" value="12" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                                <input type="number" id="frequency" value="12" oninput="calculateOfficialLetter()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Airtime Rate</label>
-                                <input type="number" id="airtimeRate" value="615" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                                <input type="number" id="airtimeRate" value="615" oninput="calculateOfficialLetter()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
                             </div>
                             <div>
                                 <label id="prodRateLabel" class="block text-xs font-bold text-gray-600 uppercase mb-1">Production Rate</label>
-                                <input type="number" id="productionRate" value="625" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                                <input type="number" id="productionRate" value="625" oninput="calculateOfficialLetter()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
                             </div>
                         </div>
                         <button onclick="calculateOfficialLetter()" class="w-full bg-gradient-to-r from-obnRed to-obnDarkRed text-white font-bold py-3 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transform active:scale-95 transition">
@@ -202,70 +218,80 @@
                                 <i class="fas fa-download"></i> Xalayaa Ofishilaa Buufadhu (Download)
                             </button>
                         </div>
-                        <div id="quotationArea" class="obn-letterhead-bg shadow-md text-slate-900 text-[15px] leading-relaxed">
+                        <div id="quotationArea" class="obn-letterhead-bg shadow-md text-slate-900 leading-relaxed">
                             <img src="logo-obn-qulqulluu.png" class="letterhead-img" alt="OBN Letterhead Background">
-                            <div class="content-overlay">
-                                <div class="mb-3 space-y-1 mt-2">
-                                    <p class="font-bold text-sm">To:- <span id="pdfClientName" class="underline">SOS CV Yabelo</span></p>
-                                    <p class="font-bold pl-6"><u>Yabelo</u></p>
+                            <div id="letterWrapper" class="content-overlay">
+                                <div class="mb-3 space-y-1 mt-2 text-[13px]">
+                                    <p class="font-bold"><span id="lblTo">To:-</span> <span id="pdfClientName" class="underline">SOS CV Yabelo</span></p>
+                                    <p class="font-bold pl-6"><u id="pdfClientAddress">Yabelo</u></p>
                                 </div>
-                                <div class="mb-4 font-bold text-center">
-                                    <p class="uppercase tracking-wide"><u>Subject:- <span id="pdfSubject">Notification for price quote</span></u></p>
+                                <div class="mb-3 font-bold text-center text-[15px]">
+                                    <p class="uppercase tracking-wide"><u id="pdfSubjectRow"><span id="lblSubject">Subject:-</span> <span id="pdfSubject">Notification for price quote</span></u></p>
                                 </div>
-                                <div class="mb-4 text-justify px-1">
+                                <div class="mb-3 text-justify px-1 min-h-[85px] text-[13px]">
                                     <p id="pdfBodyText">As your organization requested, you asked the cost estimation cost...</p>
                                 </div>
-                                <div class="mb-4 bg-slate-50/90 p-3 rounded border border-gray-300 space-y-1 mx-1">
-                                    <p><strong>Length/Duration:</strong> <span id="specDuration">20 minute</span></p>
-                                    <p><strong>Channel Type:</strong> <span id="specChannel">FM Radio</span></p>
+                                <div class="mb-3 bg-slate-50/90 p-2.5 rounded border border-gray-300 space-y-0.5 mx-1 text-[12px]">
+                                    <p><strong id="lblSpecDuration">Length/Duration:</strong> <span id="specDuration">20 minute</span></p>
+                                    <p><strong id="lblSpecChannel">Channel Type:</strong> <span id="specChannel">FM Radio</span></p>
                                 </div>
                                 <div class="mx-1">
-                                    <table class="w-full text-left border-collapse border border-gray-400 bg-white/95 text-[11px]">
+                                    <table class="w-full text-left border-collapse border border-gray-400 bg-white/95 text-[13px]">
                                         <thead>
                                             <tr class="bg-slate-100 border-b border-gray-400 font-bold">
-                                                <th class="p-2 border-r border-gray-400 w-10 text-center">T/L</th>
-                                                <th class="p-2 border-r border-gray-400">Description</th>
-                                                <th class="p-2 border-r border-gray-400 text-right">Cost/Unit</th>
-                                                <th class="p-2 border-r border-gray-400 text-center">Duration</th>
-                                                <th class="p-2 border-r border-gray-400 text-center">Yeroo (Freq)</th>
-                                                <th class="p-2 text-right">Whole Cost (ETB)</th>
+                                                <th id="thNo" class="p-1.5 border-r border-gray-400 w-10 text-center">T/L</th>
+                                                <th id="thDesc" class="p-1.5 border-r border-gray-400">Description</th>
+                                                <th id="thCost" class="p-1.5 border-r border-gray-400 text-right">Cost/Unit</th>
+                                                <th id="thDur" class="p-1.5 border-r border-gray-400 text-center">Duration</th>
+                                                <th id="thFreq" class="p-1.5 border-r border-gray-400 text-center">Yeroo (Freq)</th>
+                                                <th id="thTotal" class="p-1.5 text-right">Whole Cost (ETB)</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-400">
                                             <tr>
-                                                <td class="p-2 border-r border-gray-400 text-center">1</td>
-                                                <td class="p-2 border-r border-gray-400">Air time cost</td>
-                                                <td id="tdAirCost" class="p-2 border-r border-gray-400 text-right">0.00</td>
-                                                <td id="tdAirDur" class="p-2 border-r border-gray-400 text-center">-</td>
-                                                <td id="tdAirFreq" class="p-2 border-r border-gray-400 text-center">-</td>
-                                                <td id="tdAirTotal" class="p-2 text-right font-medium">0.00</td>
+                                                <td class="p-1.5 border-r border-gray-400 text-center">1</td>
+                                                <td id="rowAirtimeDesc" class="p-1.5 border-r border-gray-400">Air time cost</td>
+                                                <td id="tdAirCost" class="p-1.5 border-r border-gray-400 text-right">0.00</td>
+                                                <td id="tdAirDur" class="p-1.5 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdAirFreq" class="p-1.5 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdAirTotal" class="p-1.5 text-right font-medium">0.00</td>
                                             </tr>
                                             <tr>
-                                                <td class="p-2 text-center border-r border-gray-400">2</td>
-                                                <td class="p-2 border-r border-gray-400">Production cost</td>
-                                                <td id="tdProdCost" class="p-2 border-r border-gray-400 text-right">0.00</td>
-                                                <td id="tdProdDur" class="p-2 border-r border-gray-400 text-center">-</td>
-                                                <td id="tdProdFreq" class="p-2 border-r border-gray-400 text-center">-</td>
-                                                <td id="tdProdTotal" class="p-2 text-right font-medium">0.00</td>
+                                                <td class="p-1.5 text-center border-r border-gray-400">2</td>
+                                                <td id="rowProdDesc" class="p-1.5 border-r border-gray-400">Production cost</td>
+                                                <td id="tdProdCost" class="p-1.5 border-r border-gray-400 text-right">0.00</td>
+                                                <td id="tdProdDur" class="p-1.5 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdProdFreq" class="p-1.5 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdProdTotal" class="p-1.5 text-right font-medium">0.00</td>
                                             </tr>
                                             <tr class="font-bold bg-slate-50">
-                                                <td colspan="5" class="p-2 border-r border-gray-400 text-right">Sub-total</td>
-                                                <td id="tdSubTotal" class="p-2 text-right">0.00</td>
+                                                <td colspan="5" id="rowSubTotallbl" class="p-1.5 border-r border-gray-400 text-right">Sub-total</td>
+                                                <td id="tdSubTotal" class="p-1.5 text-right">0.00</td>
                                             </tr>
                                             <tr class="text-gray-600">
-                                                <td colspan="5" class="p-2 border-r border-gray-400 text-right">VAT (15%)</td>
-                                                <td id="tdVat" class="p-2 text-right">0.00</td>
+                                                <td colspan="5" id="rowVatlbl" class="p-1.5 border-r border-gray-400 text-right">VAT (15%)</td>
+                                                <td id="tdVat" class="p-1.5 text-right">0.00</td>
                                             </tr>
                                             <tr class="font-black bg-slate-100 text-obnRed">
-                                                <td colspan="5" class="p-2 border-r border-gray-400 text-right">Total cost with VAT 15%</td>
-                                                <td id="tdGrandTotal" class="p-2 text-right">0.00</td>
+                                                <td colspan="5" id="rowGrandlbl" class="p-1.5 border-r border-gray-400 text-right">Total cost with VAT 15%</td>
+                                                <td id="tdGrandTotal" class="p-1.5 text-right">0.00</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="text-justify mb-4 font-medium mt-4 px-1">
-                                    <p id="closingText">We therefore respectfully state that the total price is...</p>
-                                </div>
+                                <div class="text-justify mb-16 font-medium mt-4 px-1">
+    <p id="closingText" class="text-slate-800 leading-relaxed">
+        We therefore respectfully state that the total price is for your kind consideration and approval.
+    </p>
+</div>
+
+<div class="mt-auto pt-6 pb-12 border-t border-dashed border-gray-300 px-1">
+    <p class="font-black text-slate-900 tracking-wide text-sm">
+        <u id="ccOutput" class="font-bold underline decoration-1 underline-offset-4">
+            C/C: Deeskii Ispoonseraa fi gurgurtaa qabiyyeef
+        </u>
+    </p>
+</div>
                             </div>
                         </div>
                     </div>
@@ -315,7 +341,9 @@
         }
 
         function calculateOfficialLetter() {
-            const client = document.getElementById('clientName').value || "Maamila Kabajamaa";
+            const lang = document.getElementById('letterLanguage').value;
+            const client = document.getElementById('clientName').value || (lang==='om'?"Maamila Kabajamaa":lang==='en'?"Dear Client":"ክቡር ደንበኛ");
+            const address = document.getElementById('clientAddress').value || (lang==='om'?"Finfinnee":lang==='en'?"Addis Ababa":"አዲስ አበባ");
             const media = document.getElementById('mediaType').value;
             const channel = document.getElementById('channelName').value || "OBN Channel";
             const progType = document.getElementById('programType').value;
@@ -331,31 +359,27 @@
             if (progType === 'Advertisement') {
                 totalAir = airRate * duration * freq;
                 totalProd = prodRate; 
-                unitText = duration + " Sec";
+                unitText = duration + (lang==='om'?" Sakkandii":lang==='en'?" Sec":" ሰከንድ");
                 
                 document.getElementById('tdProdDur').innerText = "-";
                 document.getElementById('tdProdFreq').innerText = "-";
-                
-                document.getElementById('pdfSubject').innerText = `Notification for price quote for ${media} Advertisement Spot Cost.`;
-                document.getElementById('pdfBodyText').innerText = `As your organization requested, you asked the cost estimation for ${media} ADVERTISEMENT SPOT COST on ${channel}. You requested the cost of ${duration} seconds advertisement spot that will be transmitted for ${freq} times, the details are described in the table below.`;
             } else {
                 totalAir = airRate * duration * freq;
                 totalProd = prodRate * duration * freq; 
-                unitText = duration + " Min";
+                unitText = duration + (lang==='om'?" Daqiiqaa":lang==='en'?" Min":" ደቂቃ");
                 
-                document.getElementById('tdProdDur').innerText = duration + " Min";
+                document.getElementById('tdProdDur').innerText = duration + (lang==='om'?" Daqiiqaa":lang==='en'?" Min":" ደቂቃ");
                 document.getElementById('tdProdFreq').innerText = freq;
-                
-                document.getElementById('pdfSubject').innerText = `Notification for price quote for ${media} event program Air time cost.`;
-                document.getElementById('pdfBodyText').innerText = `As your organization requested, you asked the cost estimation for ${media} Airtime COST on ${channel}. You requested the cost of ${duration} minutes Event program air time that will be transmitted for ${freq} times, the details are described in the table below.`;
             }
 
             const subtotal = totalAir + totalProd;
             const vat = subtotal * 0.15;
             const grandTotal = subtotal + vat;
+            const formattedGrandTotal = grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
 
             document.getElementById('pdfClientName').innerText = client;
-            document.getElementById('specDuration').innerText = unitText + ` (Frequency: ${freq} times)`;
+            document.getElementById('pdfClientAddress').innerText = address;
+            document.getElementById('specDuration').innerText = unitText + (lang==='om'?` (Yeroo meeqa: ${freq})`:lang==='en'?` (Frequency: ${freq} times)`:` (ድግግሞሽ: ${freq} ጊዜ)`);
             document.getElementById('specChannel').innerText = `${media} (${channel})`;
 
             document.getElementById('tdAirCost').innerText = airRate.toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -368,9 +392,115 @@
 
             document.getElementById('tdSubTotal').innerText = subtotal.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('tdVat').innerText = vat.toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('tdGrandTotal').innerText = grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('tdGrandTotal').innerText = formattedGrandTotal;
 
-            document.getElementById('closingText').innerText = `We therefore respectfully state that the total price, of ${unitText} for ${freq} times, is ${grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2})} ETB (including 15% VAT).`;
+            if (lang === 'om') {
+                document.body.classList.remove('font-nyala');
+                document.getElementById('letterWrapper').className = "content-overlay";
+                document.getElementById('lblTo').innerText = "Gara:-";
+                document.getElementById('lblSubject').innerText = "Dhimma:-";
+                document.getElementById('lblSpecDuration').innerText = "Dheerina/Yeroo:";
+                document.getElementById('lblSpecChannel').innerText = "Gosa Miidiyaa:";
+                
+                document.getElementById('thNo').innerText = "T/L";
+                document.getElementById('thDesc').innerText = "Ibsa Hojii";
+                document.getElementById('thCost').innerText = "Gatii/Yuunitii";
+                document.getElementById('thDur').innerText = "Turtii";
+                document.getElementById('thFreq').innerText = "Yeroo";
+                document.getElementById('thTotal').innerText = "Waliigala (ETB)";
+                
+                document.getElementById('rowAirtimeDesc').innerText = "Gatii Yeroo Qilleensaa";
+                document.getElementById('rowProdDesc').innerText = "Kaffaltii Qophii Sagantaa";
+                document.getElementById('rowSubTotallbl').innerText = "Waliigala Gatii";
+                document.getElementById('rowVatlbl').innerText = "Taaksii Dabalata Gatii (VAT 15%)";
+                document.getElementById('rowGrandlbl').innerText = "Waliigala VAT 15% dabalatee";
+
+                if (progType === 'Advertisement') {
+                    document.getElementById('pdfSubject').innerText = `Ibsa Tilmaama Gatii Beeksisa Spot ${media} irratti dhiyaatu ilaalchisee.`;
+                    document.getElementById('pdfBodyText').innerText = `Akkuma Dhaabbanni keessan gaafateen, madaallii tilmaama gatii tajaajila beeksisa ${media} chaanaalii ${channel} irratti tamsaasamu qopheessinee jirra. Akkaata kanaan beeksisa ispotii sakkandii ${duration} ta'e kan yeroo ${freq} qilleensarra ooluufi tilmaamni gatiin qophaa'e gabatee armaan gadii keessatti guutummaatti dhiyaateera. Waliigala kaffaltii barbaachisu kanaan dhimma qopheessan dhiyeessineerra.`;
+                } else {
+                    document.getElementById('pdfSubject').innerText = `Ibsa Tilmaama Gatii Yeroo Qilleensaa (Airtime) ${media} irratti dhiyaatu ilaalchisee.`;
+                    document.getElementById('pdfBodyText').innerText = `Akkuma Dhaabbanni keessan gaafateen, madaallii tilmaama gatii tajaajila Yeroo Qilleensaa ${media} chaanaalii ${channel} irratti tamsaasamu qopheessinee jirra. Akkaata kanaan sagantaa daqiiqaa ${duration} fudhatu kan yeroo ${freq} qilleensarra ooluufi tilmaama gatii qophaa'e gabatee armaan gadii keessatti guutummaatti dhiyaateera. Waliigala kaffaltii barbaachisu kanaan dhimma qopheessan dhiyeessineerra.`;
+                }
+                document.getElementById('closingText').innerText = `Kanaafuu, turtii ${unitText} yeroo ${freq} tamsa'uuf kaffaltiin waliigalaa ${formattedGrandTotal} ETB (VAT 15% dabalatee) ta'uu isaa kabajaan ibsina.`;
+                
+                if (progType === 'Airtime') {
+                    document.getElementById('ccOutput').innerHTML = "<u>C/C: Deeskii Ispoonseraa fi gurgurtaa qabiyyeef</u>";
+                } else {
+                    document.getElementById('ccOutput').innerHTML = "<u>C/C: Deeskii Simannaafi Qophii Beeksisaaf</u>";
+                }
+
+            } else if (lang === 'en') {
+                document.body.classList.remove('font-nyala');
+                document.getElementById('letterWrapper').className = "content-overlay";
+                document.getElementById('lblTo').innerText = "To:-";
+                document.getElementById('lblSubject').innerText = "Subject:-";
+                document.getElementById('lblSpecDuration').innerText = "Length/Duration:";
+                document.getElementById('lblSpecChannel').innerText = "Channel Type:";
+                
+                document.getElementById('thNo').innerText = "S.N";
+                document.getElementById('thDesc').innerText = "Description";
+                document.getElementById('thCost').innerText = "Cost/Unit";
+                document.getElementById('thDur').innerText = "Duration";
+                document.getElementById('thFreq').innerText = "Freq";
+                document.getElementById('thTotal').innerText = "Whole Cost (ETB)";
+                
+                document.getElementById('rowAirtimeDesc').innerText = "Air time transmission cost";
+                document.getElementById('rowProdDesc').innerText = "Production and editing cost";
+                document.getElementById('rowSubTotallbl').innerText = "Sub-total";
+                document.getElementById('rowVatlbl').innerText = "Value Added Tax (VAT 15%)";
+                document.getElementById('rowGrandlbl').innerText = "Total cost with VAT 15%";
+
+                if (progType === 'Advertisement') {
+                    document.getElementById('pdfSubject').innerText = `Notification for price quote for ${media} Advertisement Spot Cost.`;
+                    document.getElementById('pdfBodyText').innerText = `As your organization requested, you asked the cost estimation for ${media} ADVERTISEMENT SPOT COST on ${channel}. You requested the cost of ${duration} seconds advertisement spot that will be transmitted for ${freq} times, the details are described in the table below. We have formatted all indicators properly based on official legal billing requests.`;
+                } else {
+                    document.getElementById('pdfSubject').innerText = `Notification for price quote for ${media} event program Air time cost.`;
+                    document.getElementById('pdfBodyText').innerText = `As your organization requested, you asked the cost estimation for ${media} Airtime COST on ${channel}. You requested the cost of ${duration} minutes Event program air time that will be transmitted for ${freq} times, the details are described in the table below. We have formatted all indicators properly based on official legal billing requests.`;
+                }
+                document.getElementById('closingText').innerText = `We therefore respectfully state that the total price, of ${unitText} for ${freq} times, is ${formattedGrandTotal} ETB (including 15% VAT).`;
+                
+                if (progType === 'Airtime') {
+                    document.getElementById('ccOutput').innerHTML = "<u>C/C: To Content Sales and Sponsor Desk</u>";
+                } else {
+                    document.getElementById('ccOutput').innerHTML = "<u>C/C: To Advertising Reception and Preparation Desk</u>";
+                }
+
+            } else if (lang === 'am') {
+                document.getElementById('letterWrapper').className = "content-overlay font-nyala";
+                document.getElementById('lblTo').innerText = "ለ:-";
+                document.getElementById('lblSubject').innerText = "ጉዳዩ:-";
+                document.getElementById('lblSpecDuration').innerText = "የቆይታ ጊዜ/ርዝመት:";
+                document.getElementById('lblSpecChannel').innerText = "የሚዲያ ዓይነት:";
+                
+                document.getElementById('thNo').innerText = "ተ.ቁ";
+                document.getElementById('thDesc').innerText = "የሥራው ዝርዝር";
+                document.getElementById('thCost').innerText = "ዋጋ/ዩኒት";
+                document.getElementById('thDur').innerText = "ቆይታ";
+                document.getElementById('thFreq').innerText = "ድግግሞሽ";
+                document.getElementById('thTotal').innerText = "አጠቃላይ ዋጋ (ETB)";
+                
+                document.getElementById('rowAirtimeDesc').innerText = "የአየር ሰዓት ማስተላለፊያ ዋጋ";
+                document.getElementById('rowProdDesc').innerText = "የዝግጅት እና ኤዲቲንግ ዋጋ";
+                document.getElementById('rowSubTotallbl').innerText = "ንዑስ ድምር";
+                document.getElementById('rowVatlbl').innerText = "ተጨማሪ እሴት ታክስ (VAT 15%)";
+                document.getElementById('rowGrandlbl').innerText = "ከነተጨማሪ እሴት ታክስ ጋር አጠቃላይ ድምር";
+
+                if (progType === 'Advertisement') {
+                    document.getElementById('pdfSubject').innerText = `በ${media} ማስታወቂያ ስፖት ስርጭት አገልግሎት የዋጋ ግምት ማስታወቂያ።`;
+                    document.getElementById('pdfBodyText').innerText = `ድርጅትዎ በጠየቀው መሠረት በ${channel} ላይ ለሚተላለፈው የ${media} ማስታወቂያ ስፖት አገልግሎት የዋጋ ግምቱን አዘጋጅተናል። በዚህም መሠረት የ${duration} ሰከንድ የቆይታ ጊዜ ያለው ማስታወቂያ ለ${freq} ጊዜ ያህል በአየር ላይ እንዲተላለፍ የተሰላው ዝርዝር ዋጋ ከዚህ በታች ባለው ሰንጠረዥ ቀርቧል።`;
+                } else {
+                    document.getElementById('pdfSubject').innerText = `በ${media} የአየር ሰዓት (Airtime) ስርጭት አገልግሎት የዋጋ ግምት ማስታወቂያ።`;
+                    document.getElementById('pdfBodyText').innerText = `ድርጅትዎ በጠየቀው መሠረት በ${channel} ላይ ለሚተላለፈው የ${media} የአየር ሰዓት አገልግሎት የዋጋ ግምቱን አዘጋጅተናል። በዚህም መሠረት የ${duration} ደቂቃ የቆይታ ጊዜ ያለው ፕሮግራም ለ${freq} ጊዜ ያህል በአየር ላይ እንዲተላለፍ የተሰላው ዝርዝር ዋጋ ከዚህ በታች ባለው ሰንጠረዥ ቀርቧል።`;
+                }
+                document.getElementById('closingText').innerText = `በመሆኑም ለ${unitText} የቆይታ ጊዜ ለ${freq} ጊዜ ያህል ለሚተላለፈው አገልግሎት ጠቅላላ ዋጋው ${formattedGrandTotal} ETB (15% ተጨማሪ እሴት ታክስን ጨምሮ) መሆኑን በክብር እንገልጻለን።`;
+                
+                if (progType === 'Airtime') {
+                    document.getElementById('ccOutput').innerHTML = "<u>C/C: ለይዘት ሽያጭ እና ስፖንሰርሺፕ ዴስክ</u>";
+                } else {
+                    document.getElementById('ccOutput').innerHTML = "<u>C/C: ማስታወቂያ መቀበያ እና ዝግጅት ዴስክ</u>";
+                }
+            }
         }
 
         function exportPDF() {
