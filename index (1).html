@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sirna Tilmaama Gatii OBN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obnRed: '#DC2626',    
+                        obnBlack: '#111827',   
+                        obnDarkRed: '#991B1B', 
+                        obnLightBg: '#F9FAFB'  
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .obn-letterhead-bg {
+            background-color: #ffffff;
+            width: 210mm;
+            height: 297mm;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .letterhead-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: fill;
+            pointer-events: none;
+        }
+        .content-overlay {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding-top: 55mm;
+            padding-bottom: 45mm;
+            padding-left: 22mm;
+            padding-right: 22mm;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans antialiased text-gray-800">
+
+    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-obnBlack px-4">
+        <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl border border-slate-200">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-obnRed text-white rounded-2xl flex items-center justify-center font-black text-3xl shadow-lg border-2 border-white mx-auto mb-3">
+                    OBN
+                </div>
+                <h2 class="text-xl font-black text-slate-900 tracking-tight">OROMIA BROADCASTING NETWORK</h2>
+                <p class="text-xs text-gray-500 font-bold uppercase tracking-wider mt-1">Sirna Tilmaama Gatii fi Xalayaa</p>
+            </div>
+
+            <div id="loginError" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-obnRed font-semibold flex items-center gap-2">
+                <i class="fas fa-exclamation-circle"></i> Username ykn Password dogoggora!
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fas fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="username" required placeholder="admin" class="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fas fa-lock text-xs"></i>
+                        </span>
+                        <input type="password" id="password" required placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed transition">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-obnRed to-obnDarkRed text-white font-bold py-3 px-4 rounded-xl shadow-md transition transform active:scale-95 duration-150 mt-2">
+                    Gali (Login) <i class="fas fa-sign-in-alt ml-1"></i>
+                </button>
+            </form>
+            <p class="text-center text-[10px] text-gray-400 mt-6 font-bold uppercase">Developed By Kajela H.</p>
+        </div>
+    </div>
+
+    <div id="mainSystem" class="hidden flex h-screen overflow-hidden">
+        <div class="w-72 bg-obnBlack text-white flex flex-col justify-between hidden md:flex border-r border-slate-800">
+            <div>
+                <div class="p-6 flex items-center justify-between bg-black">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-obnRed text-white rounded-xl flex items-center justify-center font-black text-xl shadow-md border-2 border-white">OBN</div>
+                        <div>
+                            <h1 class="text-sm font-black tracking-wide text-white">OBN SYSTEM</h1>
+                            <p class="text-[10px] text-obnRed font-bold uppercase tracking-widest">Authorized Area</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="mt-6 px-4 space-y-1">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 bg-obnRed text-white rounded-xl font-medium shadow-sm transition">
+                        <i class="fas fa-file-invoice text-white"></i> Xalayaa Ofishilaa
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-slate-900 bg-slate-950">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-left">
+                        <p class="text-xs font-bold text-white">Admin User</p>
+                        <p class="text-[10px] text-gray-500">OBN Officer</p>
+                    </div>
+                    <button onclick="handleLogout()" class="text-gray-400 hover:text-obnRed text-sm p-2 transition">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-600 font-bold uppercase text-center">Developed By Kajela H.</p>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="h-2 w-2 rounded-full bg-obnRed animate-pulse"></div>
+                    <h2 class="text-md font-bold text-slate-800">Sirna Tilmaama Gatii fi Xalayaa Ofishilaa OBN</h2>
+                </div>
+                <button onclick="handleLogout()" class="md:hidden text-gray-600 hover:text-obnRed text-lg"><i class="fas fa-sign-out-alt"></i></button>
+            </header>
+
+            <main class="p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/60 space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-obnRed"></i> Saffata herregaa
+                        </h3>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Maqaa Dhaabbataa (To: Client)</label>
+                            <input type="text" id="clientName" placeholder="Fkn. SOS CV Yabelo" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Gosa Miidiyaa (Media Type)</label>
+                            <select id="mediaType" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-obnRed">
+                                <option value="FM Radio">FM Radio</option>
+                                <option value="AM Radio">AM Radio</option>
+                                <option value="FM & AM LINK">FM & AM LINK</option>
+                                <option value="Television (TV)">Television (TV)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Maqaa Chaanaalii / FM</label>
+                            <input type="text" id="channelName" value="Yabelo FM 97.4" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Gosa Sagantaa</label>
+                            <select id="programType" onchange="toggleUnitLabel()" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-obnRed">
+                                <option value="Airtime">Yeroo Qilleensaa (Airtime/Program)</option>
+                                <option value="Advertisement">Sagantaa Beeksisaa (Spot Advertisement)</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label id="unitLabel" class="block text-xs font-bold text-gray-600 uppercase mb-1">Daqiiqaa (Duration)</label>
+                                <input type="number" id="durationValue" value="20" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Yeroo Meeqa (Freq)</label>
+                                <input type="number" id="frequency" value="12" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Airtime Rate</label>
+                                <input type="number" id="airtimeRate" value="615" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                            </div>
+                            <div>
+                                <label id="prodRateLabel" class="block text-xs font-bold text-gray-600 uppercase mb-1">Production Rate</label>
+                                <input type="number" id="productionRate" value="625" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-obnRed">
+                            </div>
+                        </div>
+                        <button onclick="calculateOfficialLetter()" class="w-full bg-gradient-to-r from-obnRed to-obnDarkRed text-white font-bold py-3 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transform active:scale-95 transition">
+                            <i class="fas fa-calculator"></i> Calculate & Create Letter
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-2 overflow-x-auto flex flex-col space-y-4">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border flex justify-between items-center w-[210mm]">
+                            <span class="text-xs text-green-600 font-bold"><i class="fas fa-check-circle"></i> Caasaan xalayaa fi fakkii duubaa dizaayinii haaromfameera!</span>
+                            <button onclick="exportPDF()" class="bg-obnBlack hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 shadow transition">
+                                <i class="fas fa-download"></i> Xalayaa Ofishilaa Buufadhu (Download)
+                            </button>
+                        </div>
+                        <div id="quotationArea" class="obn-letterhead-bg shadow-md text-slate-900 text-[15px] leading-relaxed">
+                            <img src="logo-obn-qulqulluu.png" class="letterhead-img" alt="OBN Letterhead Background">
+                            <div class="content-overlay">
+                                <div class="mb-3 space-y-1 mt-2">
+                                    <p class="font-bold text-sm">To:- <span id="pdfClientName" class="underline">SOS CV Yabelo</span></p>
+                                    <p class="font-bold pl-6"><u>Yabelo</u></p>
+                                </div>
+                                <div class="mb-4 font-bold text-center">
+                                    <p class="uppercase tracking-wide"><u>Subject:- <span id="pdfSubject">Notification for price quote</span></u></p>
+                                </div>
+                                <div class="mb-4 text-justify px-1">
+                                    <p id="pdfBodyText">As your organization requested, you asked the cost estimation cost...</p>
+                                </div>
+                                <div class="mb-4 bg-slate-50/90 p-3 rounded border border-gray-300 space-y-1 mx-1">
+                                    <p><strong>Length/Duration:</strong> <span id="specDuration">20 minute</span></p>
+                                    <p><strong>Channel Type:</strong> <span id="specChannel">FM Radio</span></p>
+                                </div>
+                                <div class="mx-1">
+                                    <table class="w-full text-left border-collapse border border-gray-400 bg-white/95 text-[11px]">
+                                        <thead>
+                                            <tr class="bg-slate-100 border-b border-gray-400 font-bold">
+                                                <th class="p-2 border-r border-gray-400 w-10 text-center">T/L</th>
+                                                <th class="p-2 border-r border-gray-400">Description</th>
+                                                <th class="p-2 border-r border-gray-400 text-right">Cost/Unit</th>
+                                                <th class="p-2 border-r border-gray-400 text-center">Duration</th>
+                                                <th class="p-2 border-r border-gray-400 text-center">Yeroo (Freq)</th>
+                                                <th class="p-2 text-right">Whole Cost (ETB)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-400">
+                                            <tr>
+                                                <td class="p-2 border-r border-gray-400 text-center">1</td>
+                                                <td class="p-2 border-r border-gray-400">Air time cost</td>
+                                                <td id="tdAirCost" class="p-2 border-r border-gray-400 text-right">0.00</td>
+                                                <td id="tdAirDur" class="p-2 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdAirFreq" class="p-2 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdAirTotal" class="p-2 text-right font-medium">0.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-2 text-center border-r border-gray-400">2</td>
+                                                <td class="p-2 border-r border-gray-400">Production cost</td>
+                                                <td id="tdProdCost" class="p-2 border-r border-gray-400 text-right">0.00</td>
+                                                <td id="tdProdDur" class="p-2 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdProdFreq" class="p-2 border-r border-gray-400 text-center">-</td>
+                                                <td id="tdProdTotal" class="p-2 text-right font-medium">0.00</td>
+                                            </tr>
+                                            <tr class="font-bold bg-slate-50">
+                                                <td colspan="5" class="p-2 border-r border-gray-400 text-right">Sub-total</td>
+                                                <td id="tdSubTotal" class="p-2 text-right">0.00</td>
+                                            </tr>
+                                            <tr class="text-gray-600">
+                                                <td colspan="5" class="p-2 border-r border-gray-400 text-right">VAT (15%)</td>
+                                                <td id="tdVat" class="p-2 text-right">0.00</td>
+                                            </tr>
+                                            <tr class="font-black bg-slate-100 text-obnRed">
+                                                <td colspan="5" class="p-2 border-r border-gray-400 text-right">Total cost with VAT 15%</td>
+                                                <td id="tdGrandTotal" class="p-2 text-right">0.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-justify mb-4 font-medium mt-4 px-1">
+                                    <p id="closingText">We therefore respectfully state that the total price is...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (user === 'admin' && pass === 'obn@2026') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainSystem').classList.remove('hidden');
+                calculateOfficialLetter(); 
+            } else {
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainSystem').classList.add('hidden');
+            document.getElementById('loginError').classList.add('hidden');
+        }
+
+        function toggleUnitLabel() {
+            const progType = document.getElementById('programType').value;
+            const unitLabel = document.getElementById('unitLabel');
+            const prodRateLabel = document.getElementById('prodRateLabel');
+            
+            if (progType === 'Advertisement') {
+                unitLabel.innerText = "Sakkandii (Seconds)";
+                prodRateLabel.innerText = "Production Cost (Fixed)";
+                document.getElementById('productionRate').value = "3000"; 
+            } else {
+                unitLabel.innerText = "Daqiiqaa (Minutes)";
+                prodRateLabel.innerText = "Production Rate";
+                document.getElementById('productionRate').value = "625"; 
+            }
+        }
+
+        function calculateOfficialLetter() {
+            const client = document.getElementById('clientName').value || "Maamila Kabajamaa";
+            const media = document.getElementById('mediaType').value;
+            const channel = document.getElementById('channelName').value || "OBN Channel";
+            const progType = document.getElementById('programType').value;
+            const duration = parseFloat(document.getElementById('durationValue').value) || 0;
+            const freq = parseInt(document.getElementById('frequency').value) || 1;
+            const airRate = parseFloat(document.getElementById('airtimeRate').value) || 0;
+            const prodRate = parseFloat(document.getElementById('productionRate').value) || 0;
+
+            let totalAir = 0;
+            let totalProd = 0;
+            let unitText = "";
+
+            if (progType === 'Advertisement') {
+                totalAir = airRate * duration * freq;
+                totalProd = prodRate; 
+                unitText = duration + " Sec";
+                
+                document.getElementById('tdProdDur').innerText = "-";
+                document.getElementById('tdProdFreq').innerText = "-";
+                
+                document.getElementById('pdfSubject').innerText = `Notification for price quote for ${media} Advertisement Spot Cost.`;
+                document.getElementById('pdfBodyText').innerText = `As your organization requested, you asked the cost estimation for ${media} ADVERTISEMENT SPOT COST on ${channel}. You requested the cost of ${duration} seconds advertisement spot that will be transmitted for ${freq} times, the details are described in the table below.`;
+            } else {
+                totalAir = airRate * duration * freq;
+                totalProd = prodRate * duration * freq; 
+                unitText = duration + " Min";
+                
+                document.getElementById('tdProdDur').innerText = duration + " Min";
+                document.getElementById('tdProdFreq').innerText = freq;
+                
+                document.getElementById('pdfSubject').innerText = `Notification for price quote for ${media} event program Air time cost.`;
+                document.getElementById('pdfBodyText').innerText = `As your organization requested, you asked the cost estimation for ${media} Airtime COST on ${channel}. You requested the cost of ${duration} minutes Event program air time that will be transmitted for ${freq} times, the details are described in the table below.`;
+            }
+
+            const subtotal = totalAir + totalProd;
+            const vat = subtotal * 0.15;
+            const grandTotal = subtotal + vat;
+
+            document.getElementById('pdfClientName').innerText = client;
+            document.getElementById('specDuration').innerText = unitText + ` (Frequency: ${freq} times)`;
+            document.getElementById('specChannel').innerText = `${media} (${channel})`;
+
+            document.getElementById('tdAirCost').innerText = airRate.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('tdAirDur').innerText = unitText;
+            document.getElementById('tdAirFreq').innerText = freq;
+            document.getElementById('tdAirTotal').innerText = totalAir.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+            document.getElementById('tdProdCost').innerText = prodRate.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('tdProdTotal').innerText = totalProd.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+            document.getElementById('tdSubTotal').innerText = subtotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('tdVat').innerText = vat.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('tdGrandTotal').innerText = grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+            document.getElementById('closingText').innerText = `We therefore respectfully state that the total price, of ${unitText} for ${freq} times, is ${grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2})} ETB (including 15% VAT).`;
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('quotationArea');
+            const client = document.getElementById('clientName').value || 'OBN';
+            
+            const opt = {
+                margin:       0,
+                filename:     `OBN_Official_Letter_${client}.pdf`,
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { 
+                    scale: 3,            
+                    useCORS: true,       
+                    logging: false,
+                    letterRendering: true
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
