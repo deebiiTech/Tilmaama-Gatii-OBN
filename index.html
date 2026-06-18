@@ -300,8 +300,7 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
+    <script>
         function handleLogin(event) {
             event.preventDefault();
             const user = document.getElementById('username').value;
@@ -504,61 +503,25 @@
             }
         }
 
-        // 1. Funtion PDF Download (Fuula tokko qofa akka bahu sirreeffamee jira)
         function exportPDF() {
-            // 'quotationArea' ykn 'letterWrapper' isa xalayaan keessa jiru ta'uu isaa mirkaneessi
-            const element = document.getElementById('quotationArea') || document.getElementById('letterWrapper');
+            const element = document.getElementById('quotationArea');
             const client = document.getElementById('clientName').value || 'OBN';
             
             const opt = {
-                margin:       [8, 8, 8, 8], // Padding sirrii fuula tokkoof ta'u
+                margin:       0,
                 filename:     `OBN_Official_Letter_${client}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
+                image:        { type: 'jpeg', quality: 1.0 },
                 html2canvas:  { 
-                    scale: 2,            
+                    scale: 3,            
                     useCORS: true,       
                     logging: false,
                     letterRendering: true
                 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                // Ofeeggannoo: Fuula duwwaa dabalataa (extra blank page) akka hin baasne dhabamsiisa
-                pagebreak:    { mode: 'avoid' } 
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            html2pdf().set(opt).from(element).save();                          
+            html2pdf().set(opt).from(element).save();
         }
-
-        // 2. Funtion Word (Docx) Download Haaraa
-        function exportWord() {
-            const element = document.getElementById('quotationArea') || document.getElementById('letterWrapper');
-            const client = document.getElementById('clientName').value || 'OBN';
-            const htmlContent = element.innerHTML;
-            
-            // Microsoft Word bifa miidhagaan akka dubbisuuf koodii qulqulluu qopheessuu
-            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
-                "xmlns:w='urn:schemas-microsoft-com:office:word' "+
-                "xmlns='http://www.w3.org/TR/REC-html40'>"+
-                "<head><meta charset='utf-8'><title>OBN Export to Word</title>"+
-                "<style>body { font-family: 'Arial', sans-serif; line-height: 1.6; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }</style>"+
-                "</head><body>";
-            const footer = "</body></html>";
-            
-            const completeHTML = header + htmlContent + footer;
-            
-            const dataType = 'application/vnd.ms-word';
-            const downloadLink = document.createElement('a');
-            document.body.appendChild(downloadLink);
-            
-            if (navigator.msSaveOrOpenBlob) {
-                const blob = new Blob([completeHTML], { type: dataType });
-                navigator.msSaveOrOpenBlob(blob, `OBN_Official_Letter_${client}.doc`);
-            } else {
-                downloadLink.href = 'data:' + dataType + ', ' + encodeURIComponent(completeHTML);
-                downloadLink.download = `OBN_Official_Letter_${client}.doc`;
-                downloadLink.click();
-            }
-            document.body.removeChild(downloadLink);
-        }
-</script>
+    </script>
 </body>
 </html>
