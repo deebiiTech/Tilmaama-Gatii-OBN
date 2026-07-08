@@ -35,7 +35,7 @@
         .header-title h1 { font-size: 22px; font-weight: 800; text-transform: uppercase; }
         .header-title p { font-size: 12px; color: rgba(255, 255, 255, 0.9); }
         
-        /* Hamburger Icon */
+        /* Hamburger Icon Mobile qofaaf */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -43,20 +43,19 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding: 5px;
+            padding: 10px;
+            z-index: 1001;
         }
         .hamburger span {
             display: block;
-            width: 28px;
+            width: 25px;
             height: 3px;
             background-color: var(--obn-white);
             border-radius: 2px;
-            transition: 0.3s;
         }
 
         /* Navigation Links */
         nav { display: none; gap: 12px; flex-wrap: wrap; }
-        nav.nav-active { display: flex; }
         nav button {
             background: var(--obn-black); color: var(--obn-white); border: 1px solid var(--obn-white);
             padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; text-transform: uppercase; font-size: 11px;
@@ -121,10 +120,10 @@
         .obn-logo-footer { width: 50px; height: 50px; background-color: var(--obn-white); border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; flex-shrink: 0; }
         .obn-logo-footer img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ==================== RESPONSIVE MEDIA QUERIES (MOBILE OPTIMIZATION) ==================== */
+        /* ==================== RESPONSIVE (BILBILA) ==================== */
         @media (max-width: 768px) {
-            header { padding: 15px 20px; flex-direction: row; justify-content: space-between; }
-            .header-title h1 { font-size: 16px; }
+            header { padding: 15px 20px; }
+            .header-title h1 { font-size: 15px; }
             .header-title p { font-size: 10px; }
             .obn-logo-header { width: 45px; height: 45px; }
 
@@ -143,12 +142,14 @@
                 z-index: 1000;
                 gap: 8px;
             }
+            /* Yommuu kllik godhamu menu-n akka banamuuf */
+            nav.nav-active { display: flex !important; }
             nav button { width: 100%; text-align: left; padding: 12px; font-size: 12px; }
 
             main { padding: 15px 20px; }
             .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .stat-card { padding: 15px; }
-            .stat-card .val { font-size: 20px; }
+            .stat-card .val { font-size: 18px; }
 
             .grid-container { grid-template-columns: 1fr; gap: 20px; }
 
@@ -171,7 +172,7 @@
             </div>
         </div>
         
-        <button class="hamburger" onclick="toggleMenu()" id="menu-toggle-btn" style="display: none;">
+        <button class="hamburger" onclick="toggleMenu()" id="menu-toggle-btn">
             <span></span>
             <span></span>
             <span></span>
@@ -368,7 +369,7 @@
             <div class="panel">
                 <h2 class="panel-title">Waa'ee Sirna Kanaa</h2>
                 <div class="about-text">
-                    <p><strong>OBN Ad Transmission Management System (v3.6)</strong> responsive fluid UI hundaafuu of-sirreessu qabu dha.</p>
+                    <p><strong>OBN Ad Transmission Management System (v3.7)</strong> responsive fluid UI hundaafuu of-sirreessu qabu dha.</p>
                     <p>Developed by: <strong>Qajeelaa H.</strong></p>
                 </div>
             </div>
@@ -394,9 +395,16 @@
         let OBN_DATABASE = JSON.parse(localStorage.getItem('obn_enterprise_logs')) || [];
         let IS_AUTHENTICATED = sessionStorage.getItem('obn_session_active') === 'true';
 
+        // MENU BANU FI CUFUUF (Hamburger Menu Logic)
         function toggleMenu() {
             const nav = document.getElementById("system-nav");
-            nav.classList.toggle("nav-active");
+            if (nav.style.display === "flex") {
+                nav.style.display = "none";
+                nav.classList.remove("nav-active");
+            } else {
+                nav.style.display = "flex";
+                nav.classList.add("nav-active");
+            }
         }
 
         function loginSystem(event) {
@@ -420,6 +428,7 @@
         function checkAuthRouting() {
             const nav = document.getElementById("system-nav");
             const burger = document.getElementById("menu-toggle-btn");
+            
             if(IS_AUTHENTICATED) { 
                 if (window.innerWidth <= 768) {
                     burger.style.display = "flex";
@@ -435,6 +444,7 @@
             }
         }
 
+        // Screen Size yommuu jijjiiramu menu akka hin badneef
         window.addEventListener('resize', () => {
             if (IS_AUTHENTICATED) {
                 const nav = document.getElementById("system-nav");
@@ -462,7 +472,7 @@
             const activeNavBtn = document.getElementById(`nav-${viewName}`);
             if(activeNavBtn) activeNavBtn.classList.add('active');
 
-            // Hide menu drawer on selection (Mobile view)
+            // Bilbila irratti erga cuqaasamee booda menu akka ofiin cufuuf
             if (window.innerWidth <= 768) {
                 document.getElementById("system-nav").style.display = "none";
                 document.getElementById("system-nav").classList.remove("nav-active");
